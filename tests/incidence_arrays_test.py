@@ -28,10 +28,10 @@ def test_build_incidence_array(body_one_step):
 
     incidence_arrays = build_incidence_arrays(body, entity_mapper)
 
-    assert incidence_arrays.next.shape != (0, ), 'Expect next not empty'
+    assert incidence_arrays.coedge_to_next.shape != (0, ), 'Expect next not empty'
     msg = 'Expect all incidence arrys have equal shapes.'
-    assert (incidence_arrays.next.shape == incidence_arrays.mate.shape and
+    assert (incidence_arrays.coedge_to_next.shape == incidence_arrays.coedge_to_mate.shape and
             incidence_arrays.coedge_to_face.shape == incidence_arrays.coedge_to_edge.shape and
-            incidence_arrays.coedge_to_edge.shape == incidence_arrays.next.shape), msg
+            incidence_arrays.coedge_to_edge.shape == incidence_arrays.coedge_to_mate.shape), msg
 
 

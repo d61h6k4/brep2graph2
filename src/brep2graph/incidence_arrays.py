@@ -30,8 +30,8 @@ from occwl.entity_mapper import EntityMapper
 class IncidenceArrays(NamedTuple):
     '''Incidence arrays encode relationship between BRep entities (face, edge and coedge).
     '''
-    next: np.ndarray
-    mate: np.ndarray
+    coedge_to_next: np.ndarray
+    coedge_to_mate: np.ndarray
     coedge_to_face: np.ndarray
     coedge_to_edge: np.ndarray
 
@@ -103,7 +103,7 @@ def build_incidence_arrays(body: Compound,
     assert np.all(coedge_to_face < coedges_num), 'coedge_to_face contains coedge without relation to face'
     assert np.all(coedge_to_edge < coedges_num), 'next contains coedge without relation to edge'
 
-    return IncidenceArrays(next=next_,
-                           mate=mate,
+    return IncidenceArrays(coedge_to_next=next_,
+                           coedge_to_mate=mate,
                            coedge_to_face=coedge_to_face,
                            coedge_to_edge=coedge_to_edge)
