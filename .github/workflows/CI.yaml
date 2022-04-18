@@ -18,11 +18,11 @@ jobs:
           python-version: ${{ matrix.python-version }}
       - name: Install dependencies
         run: |
-          conda create --name=myoccwlenv python=3.9
-          /usr/share/miniconda/bin/activate myoccwlenv
-          conda install -c lambouj -c conda-forge occwl
           python -m pip install --upgrade pip
           pip install nox
-      - name: Lint/Test/Type
+      - name: Lint
         run: |
-          nox
+          nox -e lint
+      - name: Type
+        run: |
+          nox -e typing
