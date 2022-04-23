@@ -19,7 +19,7 @@ BRepNet: A topological message passing system for solid models.
 https://arxiv.org/pdf/2104.00706.pdf
 '''
 
-from typing import Mapping, MutableSequence, Tuple
+from typing import Any, Mapping, MutableSequence, Tuple, Union
 
 import numpy as np
 
@@ -75,7 +75,7 @@ def simple_edge(
 
 def _create_graph(face_features: np.ndarray, edge_features: np.ndarray,
                   coedge_features: np.ndarray,
-                  edges: Edges) -> Mapping[str, np.ndarray]:
+                  edges: Edges) -> Mapping[str, Union[np.ndarray, Any]]:
     '''Helper method to create the graph of given nodes (as features) and edges.'''
     nodes = np.block([
         [
@@ -108,7 +108,12 @@ def _create_graph(face_features: np.ndarray, edge_features: np.ndarray,
         'n_edge': np.array([len(senders)], dtype=np.int32),
         'nodes': nodes,
         'senders': np.array(senders),
-        'receivers': np.array(receivers)
+        'receivers': np.array(receivers),
+        'aux': {
+            'faces_num': face_features.shape[0],
+            'edges_num': edge_features.shape[0],
+            'coedges_num': coedge_features.shape[0]
+        }
     }
 
 
