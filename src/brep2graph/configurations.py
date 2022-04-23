@@ -75,7 +75,7 @@ def simple_edge(
 
 def _create_graph(face_features: np.ndarray, edge_features: np.ndarray,
                   coedge_features: np.ndarray,
-                  edges: Edges) -> Mapping[str, Union[np.ndarray, Any]]:
+                  edges: Edges) -> Mapping[str, np.ndarray]:
     '''Helper method to create the graph of given nodes (as features) and edges.'''
     senders = []
     receivers = []
@@ -86,23 +86,11 @@ def _create_graph(face_features: np.ndarray, edge_features: np.ndarray,
     assert len(senders) == len(receivers)
 
     return {
-        'n_node':
-        np.array([
-            face_features.shape[0] + edge_features.shape[0] +
-            coedge_features.shape[0]
-        ],
-                 dtype=np.int32),
-        'n_edge':
-        np.array([len(senders)], dtype=np.int32),
-        'nodes': {
-            'face_features': face_features,
-            'edge_features': edge_features,
-            'coedge_features': coedge_features
-        },
-        'senders':
-        np.array(senders),
-        'receivers':
-        np.array(receivers),
+        'face_features': face_features,
+        'edge_features': edge_features,
+        'coedge_features': coedge_features,
+        'senders': np.array(senders),
+        'receivers': np.array(receivers),
     }
 
 
