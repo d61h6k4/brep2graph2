@@ -17,6 +17,7 @@
 import numpy as np
 
 from occwl.compound import Compound
+from occwl.entity_mapper import EntityMapper
 
 from brep2graph.features import features_from_body, edge_features_from_body, face_features_from_body
 
@@ -25,7 +26,7 @@ def test_features_from_body(ndarrays_regression, body_one_step):
     '''Check build incidence array works without error on the real step file.'''
     body = Compound.load_from_step(body_one_step)
 
-    features = features_from_body(body)
+    features = features_from_body(body, EntityMapper(body))
 
     ndarrays_regression.check({'features': features})
 
@@ -38,7 +39,7 @@ def test_face_features_from_body(body_one_step):
 
     body = Compound.load_from_step(body_one_step)
 
-    features = face_features_from_body(body)
+    features = face_features_from_body(body, EntityMapper(body))
 
     _check((features[:, 0] > 0), 'Area feature should be no negative')
     _check((features[:, 1] >= 0) & (features[:, 1] <= 1),
@@ -75,7 +76,7 @@ def test_edge_features_from_body(body_one_step):
 
     body = Compound.load_from_step(body_one_step)
 
-    features = edge_features_from_body(body)
+    features = edge_features_from_body(body, EntityMapper(body))
 
     _check((features[:, 0] >= 0) & (features[:, 0] <= 1),
            'Concavity is True/False feature')

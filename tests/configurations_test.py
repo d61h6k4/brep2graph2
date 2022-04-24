@@ -40,8 +40,6 @@ def test_simple_edge():
                             coedge_to_mate=np.array([1, 0], dtype=np.uint32),
                             coedge_to_face=np.array([0, 1], dtype=np.uint32),
                             coedge_to_edge=np.array([0, 0], dtype=np.uint32)))
-    assert 5 == graph['n_node'][0]
-    assert (5, 3) == graph['nodes'].shape
 
     edges = set(zip(graph['senders'], graph['receivers']))
     assert (0, 3) in edges, 'Face to Coedge'
@@ -50,6 +48,3 @@ def test_simple_edge():
     assert (2, 4) in edges, 'Edge to coedge'
     assert (3, 3) in edges, 'Coedge self-edge'
     assert (3, 4) in edges, 'Coedge to mate coedge'
-
-    assert 16 == graph['n_edge'][0]
-

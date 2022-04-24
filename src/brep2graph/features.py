@@ -30,17 +30,18 @@ from typing import Iterable, Optional
 
 import numpy as np
 
+from occwl.entity_mapper import EntityMapper
 from occwl.edge import Edge
 from occwl.edge_data_extractor import EdgeDataExtractor, EdgeConvexity
 from occwl.compound import Compound
 from occwl.face import Face
 
 
-def features_from_body(body: Compound) -> np.ndarray:
+def features_from_body(body: Compound, entity_mapper: EntityMapper) -> np.ndarray:
     '''Returns all features of all type of entities of the body.'''
-    face_features = face_features_from_body(body)
-    edge_features = edge_features_from_body(body)
-    coedge_features = coedge_features_from_body(body)
+    face_features = face_features_from_body(body, entity_mapper)
+    edge_features = edge_features_from_body(body, entity_mapper)
+    coedge_features = coedge_features_from_body(body, entity_mapper)
 
     features = np.block([
         [
@@ -63,30 +64,37 @@ def features_from_body(body: Compound) -> np.ndarray:
     return features
 
 
-def face_features_from_body(body: Compound) -> np.ndarray:
+def face_features_from_body(body: Compound, entity_mapper: EntityMapper) -> np.ndarray:
     '''Returns face features of the body'''
     face_features = []
-    for face in body.faces():
+    for ix, face in enumerate(body.faces()):
+        assert ix == entity_mapper.face_index(face)
         face_features.append(features_from_face(face))
     return np.stack(face_features)
 
 
-def edge_features_from_body(body: Compound) -> np.ndarray:
+def edge_features_from_body(body: Compound, entity_mapper: EntityMapper) -> np.ndarray:
     '''Returns edge features of the body'''
 
     edge_features = []
-    for edge in body.edges():
+    for ix, edge in enumerate(body.edges()):
+        assert ix == entity_mapper.edge_index(edge)
         edge_features.append(
             features_from_edge(edge, body.faces_from_edge(edge)))
     return np.stack(edge_features)
 
 
-def coedge_features_from_body(body: Compound) -> np.ndarray:
+def coedge_features_from_body(body: Compound, entity_mapper: EntityMapper) -> np.ndarray:
     '''Returns coedge features of the body.'''
     coedge_features = []
+
+    ix = 0
     for wire in body.wires():
         for coedge in wire.ordered_edges():
+            assert ix == entity_mapper.oriented_edge_index(coedge)
             coedge_features.append(features_from_coedge(coedge))
+            ix += 1
+
     return np.stack(coedge_features)
 
 

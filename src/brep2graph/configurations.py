@@ -19,7 +19,7 @@ BRepNet: A topological message passing system for solid models.
 https://arxiv.org/pdf/2104.00706.pdf
 '''
 
-from typing import Any, Mapping, MutableSequence, Tuple, Union
+from typing import Mapping, MutableSequence, Tuple
 
 import numpy as np
 
